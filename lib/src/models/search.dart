@@ -1,4 +1,5 @@
 import 'package:jiosaavn/src/models/image.dart';
+import 'package:jiosaavn/src/utils/link.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'search.g.dart';
@@ -27,6 +28,58 @@ class AllSearchResponse {
     required this.playlists,
     required this.topQuery,
   });
+
+  factory AllSearchResponse.fromCustomJson(
+      Map<String, dynamic> allSearchResults) {
+    return AllSearchResponse(
+      topQuery: SearchResponse(
+        results: allSearchResults["topquery"]?["data"]
+            .map((item) {
+              return SearchTopQueryResponse.fromJson({
+                ...item,
+                ...?item?["more_info"],
+              });
+            })
+            .toList()
+            .cast<SearchTopQueryResponse>(),
+        position: allSearchResults["topquery"]?["position"],
+      ),
+
+      songs: SearchResponse(
+        results: allSearchResults["songs"]?["data"]
+            .map((item) {
+              return SearchSongResponse.fromJson({
+                ...item,
+                ...?item["more_info"],
+              });
+            })
+            .toList()
+            .cast<SearchSongResponse>(),
+        position: allSearchResults["songs"]["position"],
+      ),
+      albums: SearchResponse(
+        results: allSearchResults["albums"]?["data"]
+            .map((item) => SearchAlbumResponse.fromJson({
+                  ...item,
+                  ...?item["more_info"],
+                }))
+            .toList()
+            .cast<SearchAlbumResponse>(),
+        position: allSearchResults["albums"]?["position"],
+      ),
+
+      artists: SearchResponse(
+        results: allSearchResults["artists"]?["data"]
+            .map((item) => SearchArtistResponse.fromJson(item))
+            .toList()
+            .cast<SearchArtistResponse>(),
+        position: allSearchResults["artists"]?["position"],
+      ),
+
+      /// TODO: Add playlists support
+      playlists: SearchResponse(position: 0, results: []),
+    );
+  }
 
   factory AllSearchResponse.fromJson(Map<String, dynamic> json) =>
       _$AllSearchResponseFromJson(json);
@@ -62,11 +115,11 @@ class SearchAlbumResponse {
   @JsonKey(name: 'title')
   String title;
 
-  @JsonKey(name: 'image')
-  List<DownloadLink> image;
+  @JsonKey(name: 'image', fromJson: createImageLinks)
+  List<DownloadLink>? image;
 
   @JsonKey(name: 'artist')
-  String artist;
+  String? artist;
 
   @JsonKey(name: 'url')
   String url;
@@ -87,7 +140,7 @@ class SearchAlbumResponse {
   String language;
 
   @JsonKey(name: 'song_ids')
-  String songIds;
+  String? songIds;
 
   SearchAlbumResponse({
     required this.id,
@@ -117,8 +170,8 @@ class SearchSongResponse {
   @JsonKey(name: 'title')
   String title;
 
-  @JsonKey(name: 'image')
-  List<DownloadLink> image;
+  @JsonKey(name: 'image', fromJson: createImageLinks)
+  List<DownloadLink>? image;
 
   @JsonKey(name: 'album')
   String album;
@@ -172,8 +225,8 @@ class SearchArtistResponse {
   @JsonKey(name: 'title')
   String title;
 
-  @JsonKey(name: 'image')
-  List<DownloadLink> image;
+  @JsonKey(name: 'image', fromJson: createImageLinks)
+  List<DownloadLink>? image;
 
   @JsonKey(name: 'url')
   String url;
@@ -211,8 +264,8 @@ class SearchPlaylistResponse {
   @JsonKey(name: 'title')
   String title;
 
-  @JsonKey(name: 'image')
-  List<DownloadLink> image;
+  @JsonKey(name: 'image', fromJson: createImageLinks)
+  List<DownloadLink>? image;
 
   @JsonKey(name: 'url')
   String url;
@@ -254,11 +307,11 @@ class SearchTopQueryResponse {
   @JsonKey(name: 'title')
   String title;
 
-  @JsonKey(name: 'image')
-  List<DownloadLink> image;
+  @JsonKey(name: 'image', fromJson: createImageLinks)
+  List<DownloadLink>? image;
 
   @JsonKey(name: 'album')
-  String album;
+  String? album;
 
   @JsonKey(name: 'url')
   String url;
@@ -273,18 +326,18 @@ class SearchTopQueryResponse {
   int position;
 
   @JsonKey(name: 'primary_artists')
-  String primaryArtists;
+  String? primaryArtists;
 
   @JsonKey(name: 'singers')
-  String singers;
+  String? singers;
 
   @JsonKey(name: 'language')
-  String language;
+  String? language;
 
   SearchTopQueryResponse({
     required this.id,
     required this.title,
-    required this.image,
+    this.image,
     required this.album,
     required this.url,
     required this.type,

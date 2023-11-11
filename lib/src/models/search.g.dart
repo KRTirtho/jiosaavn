@@ -81,17 +81,15 @@ SearchAlbumResponse _$SearchAlbumResponseFromJson(Map<String, dynamic> json) =>
     SearchAlbumResponse(
       id: json['id'] as String,
       title: json['title'] as String,
-      image: (json['image'] as List<dynamic>)
-          .map((e) => DownloadLink.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      artist: json['artist'] as String,
+      image: createImageLinks(json['image'] as String?),
+      artist: json['artist'] as String?,
       url: json['url'] as String,
       type: json['type'] as String,
       description: json['description'] as String,
       position: json['position'] as int,
       year: json['year'] as String,
       language: json['language'] as String,
-      songIds: json['song_ids'] as String,
+      songIds: json['song_ids'] as String?,
     );
 
 Map<String, dynamic> _$SearchAlbumResponseToJson(
@@ -114,9 +112,7 @@ SearchSongResponse _$SearchSongResponseFromJson(Map<String, dynamic> json) =>
     SearchSongResponse(
       id: json['id'] as String,
       title: json['title'] as String,
-      image: (json['image'] as List<dynamic>)
-          .map((e) => DownloadLink.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      image: createImageLinks(json['image'] as String?),
       album: json['album'] as String,
       url: json['url'] as String,
       type: json['type'] as String,
@@ -147,9 +143,7 @@ SearchArtistResponse _$SearchArtistResponseFromJson(
     SearchArtistResponse(
       id: json['id'] as String,
       title: json['title'] as String,
-      image: (json['image'] as List<dynamic>)
-          .map((e) => DownloadLink.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      image: createImageLinks(json['image'] as String?),
       url: json['url'] as String,
       type: json['type'] as String,
       description: json['description'] as String,
@@ -173,9 +167,7 @@ SearchPlaylistResponse _$SearchPlaylistResponseFromJson(
     SearchPlaylistResponse(
       id: json['id'] as String,
       title: json['title'] as String,
-      image: (json['image'] as List<dynamic>)
-          .map((e) => DownloadLink.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      image: createImageLinks(json['image'] as String?),
       url: json['url'] as String,
       language: json['language'] as String,
       type: json['type'] as String,
@@ -201,17 +193,15 @@ SearchTopQueryResponse _$SearchTopQueryResponseFromJson(
     SearchTopQueryResponse(
       id: json['id'] as String,
       title: json['title'] as String,
-      image: (json['image'] as List<dynamic>)
-          .map((e) => DownloadLink.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      album: json['album'] as String,
+      image: createImageLinks(json['image'] as String?),
+      album: json['album'] as String?,
       url: json['url'] as String,
       type: json['type'] as String,
       description: json['description'] as String,
       position: json['position'] as int,
-      primaryArtists: json['primary_artists'] as String,
-      singers: json['singers'] as String,
-      language: json['language'] as String,
+      primaryArtists: json['primary_artists'] as String?,
+      singers: json['singers'] as String?,
+      language: json['language'] as String?,
     );
 
 Map<String, dynamic> _$SearchTopQueryResponseToJson(
