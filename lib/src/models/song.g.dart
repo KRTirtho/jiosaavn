@@ -41,7 +41,7 @@ SongRequest _$SongRequestFromJson(Map<String, dynamic> json) => SongRequest(
       albumId: json['albumid'] as String,
       language: json['language'] as String,
       origin: json['origin'] as String,
-      playCount: json['play_count'] as String?,
+      playCount: SongRequest._toString(json['play_count']),
       copyrightText: json['copyright_text'] as String,
       kbps320: json['320kbps'] as String,
       isDolbyContent: json['is_dolby_content'] as bool,

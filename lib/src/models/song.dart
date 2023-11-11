@@ -53,7 +53,7 @@ class SongRequest {
   String language;
   String origin;
 
-  @JsonKey(name: "play_count")
+  @JsonKey(name: "play_count", fromJson: SongRequest._toString)
   String? playCount;
 
   @JsonKey(name: "copyright_text")
