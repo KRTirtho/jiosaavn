@@ -1,10 +1,16 @@
 name: jiosaavn
 description: Unofficial API client for jiosaavn.com
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/KRTirtho/jiosaavn
+repository: https://github.com/KRTirtho/jiosaavn
+
+topics:
+  - jiosaavn
+  - jiosaavn-api
+  - music
 
 environment:
-  sdk: '>=3.1.0 <4.0.0'
+  sdk: ">=3.1.0 <4.0.0"
 
 dependencies:
   dio: ^5.3.3
