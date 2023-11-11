@@ -1,0 +1,17 @@
+name: jiosaavn
+description: Unofficial API client for jiosaavn.com
+version: 0.0.1
+homepage: https://github.com/KRTirtho/jiosaavn
+
+environment:
+  sdk: '>=3.1.0 <4.0.0'
+
+dependencies:
+  dio: ^5.3.3
+  json_annotation: ^4.8.1
+  dart_des: ^1.0.2
+
+dev_dependencies:
+  test: ^1.24.9
+  build_runner: ^2.4.6
+  json_serializable: ^6.7.1
