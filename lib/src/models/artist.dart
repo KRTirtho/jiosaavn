@@ -1,6 +1,7 @@
 import 'package:jiosaavn/src/models/album.dart';
 import 'package:jiosaavn/src/models/image.dart';
 import 'package:jiosaavn/src/models/song.dart';
+import 'package:jiosaavn/src/utils/link.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'artist.g.dart';
@@ -71,38 +72,38 @@ class ArtistAlbumResponse {
 
 @JsonSerializable()
 class Artist {
-  String id;
+  String? id;
   String name;
-  double ctr;
-  int entity;
+  double? ctr;
+  int? entity;
   String? image;
-  String role;
+  String? role;
 
   @JsonKey(name: "perma_url")
-  String permaUrl;
+  String? permaUrl;
   String type;
 
   @JsonKey(name: "mini_obj")
-  bool miniObj;
+  bool? miniObj;
 
   @JsonKey(name: "is_radio_present")
-  bool isRadioPresent;
+  bool? isRadioPresent;
 
   @JsonKey(name: "is_followed")
-  bool isFollowed;
+  bool? isFollowed;
 
   Artist({
-    required this.id,
+    this.id,
     required this.name,
-    required this.ctr,
-    required this.entity,
     this.image,
-    required this.role,
-    required this.permaUrl,
+    this.role,
+    this.permaUrl,
     required this.type,
-    required this.miniObj,
-    required this.isRadioPresent,
-    required this.isFollowed,
+    this.miniObj,
+    this.ctr,
+    this.entity,
+    this.isRadioPresent,
+    this.isFollowed,
   });
 
   factory Artist.fromJson(Map<String, dynamic> json) => _$ArtistFromJson(json);
@@ -168,44 +169,48 @@ class ArtistUrls {
 
 @JsonSerializable()
 class ArtistRequest extends Artist {
-  String artistId;
+  String? artistId;
   String subtitle;
 
   @JsonKey(name: "follower_count")
   String followerCount;
 
   @JsonKey(name: "is_verified")
-  bool isVerified;
+  bool? isVerified;
 
-  @JsonKey(name: "dominant_language")
   String dominantLanguage;
 
-  @JsonKey(name: "dominant_type")
   String dominantType;
 
-  @JsonKey(name: "top_songs")
-  ArtistSongRequest topSongs;
+  static List<SongRequest> _fromTopSongs(List topSongs) {
+    return topSongs
+        .map((song) => SongRequest.fromArtistTopSong(song))
+        .toList()
+        .cast<SongRequest>();
+  }
 
-  @JsonKey(name: "top_albums")
-  ArtistAlbumRequest topAlbums;
+  @JsonKey(fromJson: ArtistRequest._fromTopSongs)
+  List<SongRequest> topSongs;
+
+  List<AlbumRequest> topAlbums;
+
   String bio;
   String dob;
   String fb;
   String twitter;
   String wiki;
-  ArtistUrls urls;
+  ArtistUrls? urls;
 
-  @JsonKey(name: "available_languages")
   List<String> availableLanguages;
 
   @JsonKey(name: "fan_count")
   String fanCount;
 
   ArtistRequest({
-    required this.artistId,
+    this.artistId,
     required this.subtitle,
     required this.followerCount,
-    required this.isVerified,
+    this.isVerified,
     required this.dominantLanguage,
     required this.dominantType,
     required this.topSongs,
@@ -215,24 +220,21 @@ class ArtistRequest extends Artist {
     required this.fb,
     required this.twitter,
     required this.wiki,
-    required this.urls,
+    this.urls,
     required this.availableLanguages,
     required this.fanCount,
-    // Other properties from the parent class
-    // ...
-  }) : super(
-          id: "",
-          name: "",
-          ctr: 0,
-          entity: 0,
-          image: "",
-          role: "",
-          permaUrl: "",
-          type: "",
-          miniObj: false,
-          isRadioPresent: false,
-          isFollowed: false,
-        );
+    required super.id,
+    required super.name,
+    required super.ctr,
+    required super.entity,
+    required super.image,
+    required super.role,
+    super.permaUrl,
+    required super.type,
+    required super.miniObj,
+    required super.isRadioPresent,
+    required super.isFollowed,
+  });
 
   factory ArtistRequest.fromJson(Map<String, dynamic> json) =>
       _$ArtistRequestFromJson(json);
@@ -244,9 +246,9 @@ class ArtistRequest extends Artist {
 class ArtistResponse {
   String id;
   String name;
-  String url;
-  String role;
-  List<DownloadLink> image;
+  String? url;
+  String? role;
+  List<DownloadLink>? image;
 
   @JsonKey(name: "follower_count")
   String followerCount;
@@ -255,12 +257,10 @@ class ArtistResponse {
   String fanCount;
 
   @JsonKey(name: "is_verified")
-  bool isVerified;
+  bool? isVerified;
 
-  @JsonKey(name: "dominant_language")
   String dominantLanguage;
 
-  @JsonKey(name: "dominant_type")
   String dominantType;
   String bio;
   String dob;
@@ -268,21 +268,20 @@ class ArtistResponse {
   String twitter;
   String wiki;
 
-  @JsonKey(name: "available_languages")
   List<String> availableLanguages;
 
   @JsonKey(name: "is_radio_present")
-  bool isRadioPresent;
+  bool? isRadioPresent;
 
   ArtistResponse({
     required this.id,
     required this.name,
-    required this.url,
-    required this.role,
-    required this.image,
+    this.url,
+    this.role,
+    this.image,
     required this.followerCount,
     required this.fanCount,
-    required this.isVerified,
+    this.isVerified,
     required this.dominantLanguage,
     required this.dominantType,
     required this.bio,
@@ -291,8 +290,32 @@ class ArtistResponse {
     required this.twitter,
     required this.wiki,
     required this.availableLanguages,
-    required this.isRadioPresent,
+    this.isRadioPresent,
   });
+
+  factory ArtistResponse.fromArtistRequest(ArtistRequest artist) {
+    return ArtistResponse(
+      id: (artist.artistId ?? artist.id) as String,
+      name: artist.name,
+      url: artist.urls?.overview.isNotEmpty == true
+          ? artist.urls!.overview
+          : artist.permaUrl,
+      role: artist.role,
+      image: createImageLinks(artist.image),
+      followerCount: artist.followerCount,
+      fanCount: artist.fanCount,
+      isVerified: artist.isVerified,
+      dominantLanguage: artist.dominantLanguage,
+      dominantType: artist.dominantType,
+      bio: artist.bio, // this can be JSON
+      dob: artist.dob,
+      fb: artist.fb,
+      twitter: artist.twitter,
+      wiki: artist.wiki,
+      availableLanguages: artist.availableLanguages,
+      isRadioPresent: artist.isRadioPresent,
+    );
+  }
 
   factory ArtistResponse.fromJson(Map<String, dynamic> json) =>
       _$ArtistResponseFromJson(json);

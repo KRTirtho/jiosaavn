@@ -23,11 +23,11 @@ Map<String, dynamic> _$AlbumSearchRequestToJson(AlbumSearchRequest instance) =>
     };
 
 Album _$AlbumFromJson(Map<String, dynamic> json) => Album(
-      name: json['name'] as String,
+      name: json['name'] as String?,
       year: json['year'] as String,
-      releaseDate: json['release_date'] as String,
-      primaryArtists: json['primary_artists'] as String,
-      primaryArtistsId: json['primary_artists_id'] as String,
+      releaseDate: json['release_date'] as String?,
+      primaryArtists: json['primary_artists'] as String?,
+      primaryArtistsId: json['primary_artists_id'] as String?,
       albumId: json['albumid'] as String?,
       permaUrl: json['perma_url'] as String,
       image: json['image'] as String,
@@ -63,11 +63,11 @@ AlbumRequest _$AlbumRequestFromJson(Map<String, dynamic> json) => AlbumRequest(
       listCount: json['list_count'] as String?,
       listType: json['list_type'] as String?,
       list: json['list'] as String?,
-      name: json['name'] as String,
+      name: json['name'] as String?,
       year: json['year'] as String,
-      releaseDate: json['release_date'] as String,
-      primaryArtists: json['primary_artists'] as String,
-      primaryArtistsId: json['primary_artists_id'] as String,
+      releaseDate: json['release_date'] as String?,
+      primaryArtists: json['primary_artists'] as String?,
+      primaryArtistsId: json['primary_artists_id'] as String?,
       albumId: json['albumid'] as String?,
       permaUrl: json['perma_url'] as String,
       image: json['image'] as String,
@@ -127,7 +127,7 @@ AlbumResponse _$AlbumResponseFromJson(Map<String, dynamic> json) =>
       playCount: json['play_count'] as String?,
       language: json['language'] as String?,
       explicitContent: json['explicit_content'] as String?,
-      primaryArtistsId: json['primary_artists_id'] as String,
+      primaryArtistsId: json['primary_artists_id'] as String?,
       primaryArtists: (json['primary_artists'] as List<dynamic>)
           .map((e) => AlbumArtistResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -138,7 +138,7 @@ AlbumResponse _$AlbumResponseFromJson(Map<String, dynamic> json) =>
           .map((e) => AlbumArtistResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
       songCount: json['song_count'] as String,
-      releaseDate: json['release_date'] as String,
+      releaseDate: json['release_date'] as String?,
       image: (json['image'] as List<dynamic>?)
           ?.map((e) => DownloadLink.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -172,12 +172,12 @@ AlbumArtistResponse _$AlbumArtistResponseFromJson(Map<String, dynamic> json) =>
     AlbumArtistResponse(
       id: json['id'] as String,
       name: json['name'] as String,
-      role: json['role'] as String,
+      role: json['role'] as String?,
       image: (json['image'] as List<dynamic>?)
           ?.map((e) => DownloadLink.fromJson(e as Map<String, dynamic>))
           .toList(),
       type: json['type'] as String,
-      url: json['url'] as String,
+      url: json['url'] as String?,
     );
 
 Map<String, dynamic> _$AlbumArtistResponseToJson(
@@ -192,14 +192,14 @@ Map<String, dynamic> _$AlbumArtistResponseToJson(
     };
 
 ArtistMap _$ArtistMapFromJson(Map<String, dynamic> json) => ArtistMap(
-      primaryArtists: (json['primary_artists'] as List<dynamic>)
-          .map((e) => Artist.fromJson(e as Map<String, dynamic>))
+      primaryArtists: (json['primary_artists'] as List<dynamic>?)
+          ?.map((e) => Artist.fromJson(e as Map<String, dynamic>))
           .toList(),
-      featuredArtists: (json['featured_artists'] as List<dynamic>)
-          .map((e) => Artist.fromJson(e as Map<String, dynamic>))
+      featuredArtists: (json['featured_artists'] as List<dynamic>?)
+          ?.map((e) => Artist.fromJson(e as Map<String, dynamic>))
           .toList(),
-      artists: (json['artists'] as List<dynamic>)
-          .map((e) => Artist.fromJson(e as Map<String, dynamic>))
+      artists: (json['artists'] as List<dynamic>?)
+          ?.map((e) => Artist.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -214,7 +214,9 @@ MoreInfo _$MoreInfoFromJson(Map<String, dynamic> json) => MoreInfo(
       text: json['text'] as String,
       music: json['music'] as String?,
       songCount: json['song_count'] as String,
-      artistMap: ArtistMap.fromJson(json['artist_map'] as Map<String, dynamic>),
+      artistMap: json['artist_map'] == null
+          ? null
+          : ArtistMap.fromJson(json['artist_map'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$MoreInfoToJson(MoreInfo instance) => <String, dynamic>{

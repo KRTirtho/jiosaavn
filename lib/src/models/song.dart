@@ -44,7 +44,7 @@ class SongRequest {
   @JsonKey(name: "featured_artists_id")
   String featuredArtistsId;
   String singers;
-  String starring;
+  String? starring;
   String image;
   String label;
 
@@ -54,7 +54,7 @@ class SongRequest {
   String origin;
 
   @JsonKey(name: "play_count")
-  String playCount;
+  String? playCount;
 
   @JsonKey(name: "copyright_text")
   String copyrightText;
@@ -77,8 +77,20 @@ class SongRequest {
   @JsonKey(name: "encrypted_media_url")
   String encryptedMediaUrl;
 
-  @JsonKey(name: "encrypted_media_path")
-  String encryptedMediaPath;
+  static bool _fromBoolOrString(Object? value) {
+    if (value is bool) {
+      return value;
+    }
+    return bool.parse(value as String);
+  }
+
+  static String? _toString(obj) => obj?.toString();
+
+  @JsonKey(
+    name: "encrypted_media_path",
+    fromJson: SongRequest._toString,
+  )
+  String? encryptedMediaPath;
 
   @JsonKey(name: "media_preview_url")
   String? mediaPreviewUrl;
@@ -89,7 +101,7 @@ class SongRequest {
   @JsonKey(name: "album_url")
   String albumUrl;
   String duration;
-  Map<String, String> artistMap; // exclusion for snake_case
+  ArtistMap artistMap; // exclusion for snake_case
   Rights rights;
   bool? webp;
 
@@ -122,13 +134,13 @@ class SongRequest {
     required this.featuredArtists,
     required this.featuredArtistsId,
     required this.singers,
-    required this.starring,
+    this.starring,
     required this.image,
     required this.label,
     required this.albumId,
     required this.language,
     required this.origin,
-    required this.playCount,
+    this.playCount,
     required this.copyrightText,
     required this.kbps320,
     required this.isDolbyContent,
@@ -153,6 +165,59 @@ class SongRequest {
     required this.labelUrl,
   });
 
+  factory SongRequest.fromArtistTopSong(Map<String, dynamic> json) {
+    final moreInfo = json["more_info"];
+
+    final artistMap = ArtistMap.fromJson(moreInfo["artistMap"]);
+    return SongRequest(
+      id: json["id"],
+      album: moreInfo["album"],
+      albumId: moreInfo["album_id"],
+      albumUrl: moreInfo["album_url"],
+      artistMap: artistMap,
+      copyrightText: moreInfo["copyright_text"],
+      duration: moreInfo["duration"],
+      encryptedMediaPath: json["encrypted_media_path"]?.toString(),
+      encryptedMediaUrl: moreInfo["encrypted_media_url"],
+      explicitContent: int.parse(json["explicit_content"]),
+      featuredArtists:
+          artistMap.featuredArtists!.map((artist) => artist.name).join(", "),
+      featuredArtistsId:
+          artistMap.featuredArtists!.map((artist) => artist.id).join(", "),
+      hasLyrics: moreInfo["has_lyrics"],
+      image: json["image"],
+      isDolbyContent: moreInfo["is_dolby_content"],
+      kbps320: moreInfo["320kbps"],
+      label: moreInfo["label"],
+      labelUrl: moreInfo["label_url"],
+      language: json["language"],
+      lyricsSnippet: moreInfo["lyrics_snippet"],
+      music: moreInfo["music"],
+      musicId: json["id"],
+      origin: moreInfo["origin"],
+      permaUrl: json["perma_url"],
+      playCount: json["play_count"],
+      primaryArtists:
+          artistMap.primaryArtists!.map((artist) => artist.name).join(", "),
+      primaryArtistsId:
+          artistMap.primaryArtists!.map((artist) => artist.id).join(", "),
+      releaseDate: moreInfo["release_date"],
+      rights: Rights.fromJson(moreInfo["rights"]),
+      singers: artistMap.artists!.map((artist) => artist.name).join(", "),
+      song: json["title"],
+      starred: moreInfo["starred"],
+      starring: moreInfo["starring"],
+      trillerAvailable: moreInfo["triller_available"],
+      type: json["type"] as String,
+      year: json["year"] as String,
+      cacheState: moreInfo["cache_state"] as String?,
+      mediaPreviewUrl: "",
+      vcode: moreInfo["vcode"] as String?,
+      vlink: moreInfo["vlink"] as String?,
+      webp: bool.parse(moreInfo["webp"] as String),
+    );
+  }
+
   factory SongRequest.fromJson(Map<String, dynamic> json) =>
       _$SongRequestFromJson(json);
 
@@ -161,11 +226,24 @@ class SongRequest {
 
 @JsonSerializable()
 class Rights {
+  static int _fromIntOrString(Object? value) {
+    if (value is int) {
+      return value;
+    }
+    return int.parse(value as String);
+  }
+
+  @JsonKey(fromJson: Rights._fromIntOrString)
   int code;
   String reason;
+
+  @JsonKey(fromJson: SongRequest._fromBoolOrString)
   bool cacheable;
 
-  @JsonKey(name: "delete_cached_object")
+  @JsonKey(
+    name: "delete_cached_object",
+    fromJson: SongRequest._fromBoolOrString,
+  )
   bool deleteCachedObject;
 
   Rights({
@@ -198,7 +276,7 @@ class SongSearchResponse {
 @JsonSerializable()
 class SongResponse {
   String id;
-  String name;
+  String? name;
   String type;
   SongResponseAlbum album;
   String year;
@@ -224,7 +302,7 @@ class SongResponse {
   int explicitContent;
 
   @JsonKey(name: "play_count")
-  String playCount;
+  String? playCount;
   String language;
 
   @JsonKey(name: "has_lyrics")
@@ -238,7 +316,7 @@ class SongResponse {
 
   SongResponse({
     required this.id,
-    required this.name,
+    this.name,
     required this.type,
     required this.album,
     required this.year,
@@ -250,7 +328,7 @@ class SongResponse {
     required this.featuredArtists,
     required this.featuredArtistsId,
     required this.explicitContent,
-    required this.playCount,
+    this.playCount,
     required this.language,
     required this.hasLyrics,
     required this.url,
@@ -270,7 +348,7 @@ class SongResponse {
         url: song.albumUrl,
       ),
       year: song.year,
-      releaseDate: song.releaseDate,
+      releaseDate: song.releaseDate ?? "",
       duration: song.duration,
       label: song.label,
       primaryArtists: song.primaryArtists,

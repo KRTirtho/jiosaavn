@@ -75,17 +75,17 @@ Map<String, dynamic> _$ArtistAlbumResponseToJson(
     };
 
 Artist _$ArtistFromJson(Map<String, dynamic> json) => Artist(
-      id: json['id'] as String,
+      id: json['id'] as String?,
       name: json['name'] as String,
-      ctr: (json['ctr'] as num).toDouble(),
-      entity: json['entity'] as int,
       image: json['image'] as String?,
-      role: json['role'] as String,
-      permaUrl: json['perma_url'] as String,
+      role: json['role'] as String?,
+      permaUrl: json['perma_url'] as String?,
       type: json['type'] as String,
-      miniObj: json['mini_obj'] as bool,
-      isRadioPresent: json['is_radio_present'] as bool,
-      isFollowed: json['is_followed'] as bool,
+      miniObj: json['mini_obj'] as bool?,
+      ctr: (json['ctr'] as num?)?.toDouble(),
+      entity: json['entity'] as int?,
+      isRadioPresent: json['is_radio_present'] as bool?,
+      isFollowed: json['is_followed'] as bool?,
     );
 
 Map<String, dynamic> _$ArtistToJson(Artist instance) => <String, dynamic>{
@@ -153,38 +153,40 @@ Map<String, dynamic> _$ArtistUrlsToJson(ArtistUrls instance) =>
 
 ArtistRequest _$ArtistRequestFromJson(Map<String, dynamic> json) =>
     ArtistRequest(
-      artistId: json['artistId'] as String,
+      artistId: json['artistId'] as String?,
       subtitle: json['subtitle'] as String,
       followerCount: json['follower_count'] as String,
-      isVerified: json['is_verified'] as bool,
-      dominantLanguage: json['dominant_language'] as String,
-      dominantType: json['dominant_type'] as String,
-      topSongs:
-          ArtistSongRequest.fromJson(json['top_songs'] as Map<String, dynamic>),
-      topAlbums: ArtistAlbumRequest.fromJson(
-          json['top_albums'] as Map<String, dynamic>),
+      isVerified: json['is_verified'] as bool?,
+      dominantLanguage: json['dominantLanguage'] as String,
+      dominantType: json['dominantType'] as String,
+      topSongs: ArtistRequest._fromTopSongs(json['topSongs'] as List),
+      topAlbums: (json['topAlbums'] as List<dynamic>)
+          .map((e) => AlbumRequest.fromJson(e as Map<String, dynamic>))
+          .toList(),
       bio: json['bio'] as String,
       dob: json['dob'] as String,
       fb: json['fb'] as String,
       twitter: json['twitter'] as String,
       wiki: json['wiki'] as String,
-      urls: ArtistUrls.fromJson(json['urls'] as Map<String, dynamic>),
-      availableLanguages: (json['available_languages'] as List<dynamic>)
+      urls: json['urls'] == null
+          ? null
+          : ArtistUrls.fromJson(json['urls'] as Map<String, dynamic>),
+      availableLanguages: (json['availableLanguages'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
       fanCount: json['fan_count'] as String,
-    )
-      ..id = json['id'] as String
-      ..name = json['name'] as String
-      ..ctr = (json['ctr'] as num).toDouble()
-      ..entity = json['entity'] as int
-      ..image = json['image'] as String?
-      ..role = json['role'] as String
-      ..permaUrl = json['perma_url'] as String
-      ..type = json['type'] as String
-      ..miniObj = json['mini_obj'] as bool
-      ..isRadioPresent = json['is_radio_present'] as bool
-      ..isFollowed = json['is_followed'] as bool;
+      id: json['id'] as String?,
+      name: json['name'] as String,
+      ctr: (json['ctr'] as num?)?.toDouble(),
+      entity: json['entity'] as int?,
+      image: json['image'] as String?,
+      role: json['role'] as String?,
+      permaUrl: json['perma_url'] as String?,
+      type: json['type'] as String,
+      miniObj: json['mini_obj'] as bool?,
+      isRadioPresent: json['is_radio_present'] as bool?,
+      isFollowed: json['is_followed'] as bool?,
+    );
 
 Map<String, dynamic> _$ArtistRequestToJson(ArtistRequest instance) =>
     <String, dynamic>{
@@ -203,17 +205,17 @@ Map<String, dynamic> _$ArtistRequestToJson(ArtistRequest instance) =>
       'subtitle': instance.subtitle,
       'follower_count': instance.followerCount,
       'is_verified': instance.isVerified,
-      'dominant_language': instance.dominantLanguage,
-      'dominant_type': instance.dominantType,
-      'top_songs': instance.topSongs,
-      'top_albums': instance.topAlbums,
+      'dominantLanguage': instance.dominantLanguage,
+      'dominantType': instance.dominantType,
+      'topSongs': instance.topSongs,
+      'topAlbums': instance.topAlbums,
       'bio': instance.bio,
       'dob': instance.dob,
       'fb': instance.fb,
       'twitter': instance.twitter,
       'wiki': instance.wiki,
       'urls': instance.urls,
-      'available_languages': instance.availableLanguages,
+      'availableLanguages': instance.availableLanguages,
       'fan_count': instance.fanCount,
     };
 
@@ -221,25 +223,25 @@ ArtistResponse _$ArtistResponseFromJson(Map<String, dynamic> json) =>
     ArtistResponse(
       id: json['id'] as String,
       name: json['name'] as String,
-      url: json['url'] as String,
-      role: json['role'] as String,
-      image: (json['image'] as List<dynamic>)
-          .map((e) => DownloadLink.fromJson(e as Map<String, dynamic>))
+      url: json['url'] as String?,
+      role: json['role'] as String?,
+      image: (json['image'] as List<dynamic>?)
+          ?.map((e) => DownloadLink.fromJson(e as Map<String, dynamic>))
           .toList(),
       followerCount: json['follower_count'] as String,
       fanCount: json['fan_count'] as String,
-      isVerified: json['is_verified'] as bool,
-      dominantLanguage: json['dominant_language'] as String,
-      dominantType: json['dominant_type'] as String,
+      isVerified: json['is_verified'] as bool?,
+      dominantLanguage: json['dominantLanguage'] as String,
+      dominantType: json['dominantType'] as String,
       bio: json['bio'] as String,
       dob: json['dob'] as String,
       fb: json['fb'] as String,
       twitter: json['twitter'] as String,
       wiki: json['wiki'] as String,
-      availableLanguages: (json['available_languages'] as List<dynamic>)
+      availableLanguages: (json['availableLanguages'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      isRadioPresent: json['is_radio_present'] as bool,
+      isRadioPresent: json['is_radio_present'] as bool?,
     );
 
 Map<String, dynamic> _$ArtistResponseToJson(ArtistResponse instance) =>
@@ -252,13 +254,13 @@ Map<String, dynamic> _$ArtistResponseToJson(ArtistResponse instance) =>
       'follower_count': instance.followerCount,
       'fan_count': instance.fanCount,
       'is_verified': instance.isVerified,
-      'dominant_language': instance.dominantLanguage,
-      'dominant_type': instance.dominantType,
+      'dominantLanguage': instance.dominantLanguage,
+      'dominantType': instance.dominantType,
       'bio': instance.bio,
       'dob': instance.dob,
       'fb': instance.fb,
       'twitter': instance.twitter,
       'wiki': instance.wiki,
-      'available_languages': instance.availableLanguages,
+      'availableLanguages': instance.availableLanguages,
       'is_radio_present': instance.isRadioPresent,
     };

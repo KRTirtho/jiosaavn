@@ -23,17 +23,17 @@ class AlbumSearchRequest {
 
 @JsonSerializable()
 class Album {
-  String name;
+  String? name;
   String year;
 
   @JsonKey(name: "release_date")
-  String releaseDate;
+  String? releaseDate;
 
   @JsonKey(name: "primary_artists")
-  String primaryArtists;
+  String? primaryArtists;
 
   @JsonKey(name: "primary_artists_id")
-  String primaryArtistsId;
+  String? primaryArtistsId;
 
   @JsonKey(name: "albumid")
   String? albumId;
@@ -44,11 +44,11 @@ class Album {
   List<SongRequest>? songs;
 
   Album({
-    required this.name,
+    this.name,
     required this.year,
-    required this.releaseDate,
-    required this.primaryArtists,
-    required this.primaryArtistsId,
+    this.releaseDate,
+    this.primaryArtists,
+    this.primaryArtistsId,
     this.albumId,
     required this.permaUrl,
     required this.image,
@@ -148,7 +148,7 @@ class AlbumResponse {
   String? explicitContent;
 
   @JsonKey(name: "primary_artists_id")
-  String primaryArtistsId;
+  String? primaryArtistsId;
 
   @JsonKey(name: "primary_artists")
   List<AlbumArtistResponse> primaryArtists;
@@ -161,7 +161,7 @@ class AlbumResponse {
   String songCount;
 
   @JsonKey(name: "release_date")
-  String releaseDate;
+  String? releaseDate;
 
   List<DownloadLink>? image;
   String url;
@@ -175,12 +175,12 @@ class AlbumResponse {
     this.playCount,
     this.language,
     this.explicitContent,
-    required this.primaryArtistsId,
+    this.primaryArtistsId,
     required this.primaryArtists,
     required this.artists,
     required this.featuredArtists,
     required this.songCount,
-    required this.releaseDate,
+    this.releaseDate,
     this.image,
     required this.url,
     required this.songs,
@@ -200,20 +200,20 @@ class AlbumResponse {
           album.moreInfo?.songCount ?? album.songs?.length.toString() ?? '0',
       url: album.permaUrl,
       primaryArtistsId: album.primaryArtists,
-      primaryArtists: album.moreInfo?.artistMap.primaryArtists
-              .map(
+      primaryArtists: album.moreInfo?.artistMap?.primaryArtists
+              ?.map(
                 (artist) => AlbumArtistResponse.fromArtist(artist),
               )
               .toList() ??
           [],
-      featuredArtists: album.moreInfo?.artistMap.featuredArtists
-              .map(
+      featuredArtists: album.moreInfo?.artistMap?.featuredArtists
+              ?.map(
                 (artist) => AlbumArtistResponse.fromArtist(artist),
               )
               .toList() ??
           [],
-      artists: album.moreInfo?.artistMap.artists
-              .map(
+      artists: album.moreInfo?.artistMap?.artists
+              ?.map(
                 (artist) => AlbumArtistResponse.fromArtist(artist),
               )
               .toList() ??
@@ -236,23 +236,23 @@ class AlbumResponse {
 class AlbumArtistResponse {
   String id;
   String name;
-  String role;
+  String? role;
   List<DownloadLink>? image;
   String type;
-  String url;
+  String? url;
 
   AlbumArtistResponse({
     required this.id,
     required this.name,
-    required this.role,
+    this.role,
     this.image,
     required this.type,
-    required this.url,
+    this.url,
   });
 
   factory AlbumArtistResponse.fromArtist(Artist artist) {
     return AlbumArtistResponse(
-      id: artist.id,
+      id: artist.id!,
       name: artist.name,
       url: artist.permaUrl,
       type: artist.type,
@@ -270,23 +270,32 @@ class AlbumArtistResponse {
 @JsonSerializable()
 class ArtistMap {
   @JsonKey(name: "primary_artists")
-  List<Artist> primaryArtists;
+  List<Artist>? primaryArtists;
 
   @JsonKey(name: "featured_artists")
-  List<Artist> featuredArtists;
+  List<Artist>? featuredArtists;
 
-  List<Artist> artists;
+  List<Artist>? artists;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  Map<String, dynamic>? map;
 
   ArtistMap({
-    required this.primaryArtists,
-    required this.featuredArtists,
-    required this.artists,
+    this.primaryArtists,
+    this.featuredArtists,
+    this.artists,
+    this.map,
   });
 
-  factory ArtistMap.fromJson(Map<String, dynamic> json) =>
-      _$ArtistMapFromJson(json);
+  factory ArtistMap.fromJson(Map<String, dynamic> json) => [
+        "primary_artists",
+        "featured_artists",
+        "artists"
+      ].every((key) => json[key] == null)
+          ? ArtistMap(map: json)
+          : _$ArtistMapFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ArtistMapToJson(this);
+  Map<String, dynamic> toJson() => map != null ? map! : _$ArtistMapToJson(this);
 }
 
 @JsonSerializable()
@@ -299,14 +308,14 @@ class MoreInfo {
   String songCount;
 
   @JsonKey(name: "artist_map")
-  ArtistMap artistMap;
+  ArtistMap? artistMap;
 
   MoreInfo({
     required this.query,
     required this.text,
     this.music,
     required this.songCount,
-    required this.artistMap,
+    this.artistMap,
   });
 
   factory MoreInfo.fromJson(Map<String, dynamic> json) =>

@@ -5,7 +5,7 @@ import 'package:jiosaavn/src/models/album.dart';
 void main(List<String> args) {
   final album = AlbumEndpoint();
 
-  group("Album Endpoint", () {
+  group("Album Endpoint => ", () {
     test("Get Album Details by Id", () async {
       final res = await album.detailsById("1142502");
 
