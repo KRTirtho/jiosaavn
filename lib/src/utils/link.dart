@@ -51,3 +51,12 @@ List<DownloadLink>? createImageLinks(String? link) {
       )
       .toList();
 }
+
+String sanitizeLyrics(String lyrics) => lyrics
+        .replaceAll("\"", "'")
+        .replaceAll(RegExp(" {2}", caseSensitive: false), ' ')
+        .split('<br>')
+        .map((text) {
+      if (text.isEmpty) return text;
+      return text[0].toUpperCase() + text.substring(1);
+    }).join('\n');
