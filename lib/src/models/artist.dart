@@ -170,59 +170,59 @@ class ArtistUrls {
 @JsonSerializable()
 class ArtistRequest extends Artist {
   String? artistId;
-  String subtitle;
+  String? subtitle;
 
   @JsonKey(name: "follower_count")
-  String followerCount;
+  String? followerCount;
 
   @JsonKey(name: "is_verified")
   bool? isVerified;
 
-  String dominantLanguage;
+  String? dominantLanguage;
 
-  String dominantType;
+  String? dominantType;
 
-  static List<SongRequest> _fromTopSongs(List topSongs) {
+  static List<SongRequest>? _fromTopSongs(List? topSongs) {
     return topSongs
-        .map((song) => SongRequest.fromArtistTopSong(song))
+        ?.map((song) => SongRequest.fromArtistTopSong(song))
         .toList()
         .cast<SongRequest>();
   }
 
   @JsonKey(fromJson: ArtistRequest._fromTopSongs)
-  List<SongRequest> topSongs;
+  List<SongRequest>? topSongs;
 
-  List<AlbumRequest> topAlbums;
+  List<AlbumRequest>? topAlbums;
 
-  String bio;
-  String dob;
-  String fb;
-  String twitter;
-  String wiki;
+  String? bio;
+  String? dob;
+  String? fb;
+  String? twitter;
+  String? wiki;
   ArtistUrls? urls;
 
-  List<String> availableLanguages;
+  List<String>? availableLanguages;
 
   @JsonKey(name: "fan_count")
-  String fanCount;
+  String? fanCount;
 
   ArtistRequest({
     this.artistId,
-    required this.subtitle,
-    required this.followerCount,
+    this.subtitle,
+    this.followerCount,
     this.isVerified,
-    required this.dominantLanguage,
-    required this.dominantType,
-    required this.topSongs,
-    required this.topAlbums,
-    required this.bio,
-    required this.dob,
-    required this.fb,
-    required this.twitter,
-    required this.wiki,
+    this.dominantLanguage,
+    this.dominantType,
+    this.topSongs,
+    this.topAlbums,
+    this.bio,
+    this.dob,
+    this.fb,
+    this.twitter,
+    this.wiki,
     this.urls,
-    required this.availableLanguages,
-    required this.fanCount,
+    this.availableLanguages,
+    this.fanCount,
     required super.id,
     required super.name,
     required super.ctr,
@@ -251,24 +251,24 @@ class ArtistResponse {
   List<DownloadLink>? image;
 
   @JsonKey(name: "follower_count")
-  String followerCount;
+  String? followerCount;
 
   @JsonKey(name: "fan_count")
-  String fanCount;
+  String? fanCount;
 
   @JsonKey(name: "is_verified")
   bool? isVerified;
 
-  String dominantLanguage;
+  String? dominantLanguage;
+  String? dominantType;
 
-  String dominantType;
-  String bio;
-  String dob;
-  String fb;
-  String twitter;
-  String wiki;
+  String? bio;
+  String? dob;
+  String? fb;
+  String? twitter;
+  String? wiki;
 
-  List<String> availableLanguages;
+  List<String>? availableLanguages;
 
   @JsonKey(name: "is_radio_present")
   bool? isRadioPresent;
@@ -279,17 +279,17 @@ class ArtistResponse {
     this.url,
     this.role,
     this.image,
-    required this.followerCount,
-    required this.fanCount,
+    this.followerCount,
+    this.fanCount,
     this.isVerified,
-    required this.dominantLanguage,
-    required this.dominantType,
-    required this.bio,
-    required this.dob,
-    required this.fb,
-    required this.twitter,
-    required this.wiki,
-    required this.availableLanguages,
+    this.dominantLanguage,
+    this.dominantType,
+    this.bio,
+    this.dob,
+    this.fb,
+    this.twitter,
+    this.wiki,
+    this.availableLanguages,
     this.isRadioPresent,
   });
 
