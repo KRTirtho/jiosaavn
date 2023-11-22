@@ -48,7 +48,7 @@ class PlaylistRequest extends Playlist {
     required super.type,
     required super.listCount,
     required super.fanCount,
-    required super.H2,
+    required super.h2,
     required super.isDolbyPlaylist,
     required super.subheading,
     required super.subTypes,
@@ -78,6 +78,7 @@ class PlaylistRequest extends Playlist {
   factory PlaylistRequest.fromJson(Map<String, dynamic> json) =>
       _$PlaylistRequestFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$PlaylistRequestToJson(this);
 }
 
@@ -167,7 +168,7 @@ class Playlist {
     required this.type,
     required this.listCount,
     required this.fanCount,
-    required this.H2,
+    required this.h2,
     required this.isDolbyPlaylist,
     required this.subheading,
     required this.subTypes,
@@ -214,7 +215,8 @@ class Playlist {
   @JsonKey(name: 'fan_count')
   final int fanCount;
 
-  final dynamic H2;
+  @JsonKey(name: 'H2')
+  final dynamic h2;
 
   @JsonKey(name: 'is_dolby_playlist')
   final bool isDolbyPlaylist;

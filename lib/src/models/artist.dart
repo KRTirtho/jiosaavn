@@ -239,6 +239,7 @@ class ArtistRequest extends Artist {
   factory ArtistRequest.fromJson(Map<String, dynamic> json) =>
       _$ArtistRequestFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$ArtistRequestToJson(this);
 }
 

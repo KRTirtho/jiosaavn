@@ -16,7 +16,7 @@ class LyricsEndpoint extends BaseClient {
 
     final lyricReq = LyricsRequest.fromJson(response);
 
-    if (lyricReq.lyrics == null)
+    if (lyricReq.lyrics == null) {
       throw DioException(
         type: DioExceptionType.badResponse,
         error: "Lyrics not found for this song",
@@ -26,6 +26,7 @@ class LyricsEndpoint extends BaseClient {
           path: endpoints.lyrics,
         ),
       );
+    }
 
     return LyricsResponse(
       copyright: lyricReq.lyricsCopyRight,

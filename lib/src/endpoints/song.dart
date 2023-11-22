@@ -12,7 +12,7 @@ class SongEndpoint extends BaseClient {
       "pids": ids.join(','),
     });
 
-    if (response["songs"] == null || response["songs"]?.isNotEmpty == false)
+    if (response["songs"] == null || response["songs"]?.isNotEmpty == false) {
       throw DioException(
         requestOptions: RequestOptions(
           baseUrl: options?.baseUrl,
@@ -21,6 +21,7 @@ class SongEndpoint extends BaseClient {
         error: "No songs found",
         type: DioExceptionType.badResponse,
       );
+    }
 
     return (response["songs"] as List)
         .map(

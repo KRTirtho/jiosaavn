@@ -115,6 +115,7 @@ class AlbumRequest extends Album {
   factory AlbumRequest.fromJson(Map<String, dynamic> json) =>
       _$AlbumRequestFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$AlbumRequestToJson(this);
 }
 
