@@ -7,12 +7,9 @@ part of 'image.dart';
 // **************************************************************************
 
 DownloadLink _$DownloadLinkFromJson(Map<String, dynamic> json) => DownloadLink(
-      quality: json['quality'] as String,
-      link: json['link'] as String,
-    );
+  quality: json['quality'] as String,
+  link: json['link'] as String,
+);
 
 Map<String, dynamic> _$DownloadLinkToJson(DownloadLink instance) =>
-    <String, dynamic>{
-      'quality': instance.quality,
-      'link': instance.link,
-    };
+    <String, dynamic>{'quality': instance.quality, 'link': instance.link};

@@ -30,7 +30,7 @@ class SongRequest {
   String music;
 
   @JsonKey(name: "music_id")
-  String musicId;
+  String? musicId;
 
   @JsonKey(name: "primary_artists")
   String primaryArtists;
